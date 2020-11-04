@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import Layout from './components/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
 
+import './index.scss';
+
 const App = () => {
   return (
     <ErrorBoundary>
