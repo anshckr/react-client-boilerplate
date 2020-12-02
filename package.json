@@ -58,9 +58,12 @@
   },
   "dependencies": {
     "@babel/runtime": "7.11.2",
+    "@novnc/novnc": "^1.2.0",
     "axios": "0.20.0",
     "bootstrap": "4.5.2",
     "classnames": "2.2.6",
+    "firebase": "^8.1.1",
+    "firepad": "^1.5.11",
     "fontsource-roboto": "3.0.3",
     "lodash": "4.17.20",
     "monaco-editor": "^0.21.2",
@@ -72,6 +75,7 @@
     "react-router-dom": "5.2.0",
     "redux": "4.0.5",
     "redux-thunk": "2.3.0",
+    "xterm": "^4.9.0",
     "xterm-addon-unicode11": "^0.2.0"
   }
 }

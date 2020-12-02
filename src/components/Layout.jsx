@@ -1,11 +1,24 @@
 import React, { useEffect } from 'react';
 import * as monaco from 'monaco-editor';
+
+import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { Unicode11Addon } from 'xterm-addon-unicode11';
 
-import runit from 'utils/skulpt';
+// import 'firebase';
+// import Firepad from 'firepad';
+// import firebase from 'firebase';
 
+// import 'firebase/auth';
+// import 'firebase/database';
+// const Firepad = require('firepad').default;
+// import io from 'socket.io-client';
+
+import { connectNoVNC } from 'utils/noVNC';
+
+import 'xterm/css/xterm.css';
 import './Layout.scss';
+import { executeCode } from '../utils/socket';
 
 const Layout = () => {
   useEffect(() => {
@@ -21,12 +34,18 @@ const Layout = () => {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
+    // window.firebaseWindow = firebase;
+
     // Get Firebase Database reference.
-    var firepadRef = firebase.database().ref();
+    var firepadRef = firebase.database().ref('cuemath');
 
     //// Create Monaco and firepad.
     window.editor = monaco.editor.create(document.getElementById('firepad'), {
       language: 'python',
+      cursorBlinking: 'solid',
+      cursorSmoothCaretAnimation: true,
+      cursorStyle: 'block',
+      cursorSurroundingLines: '1',
     });
 
     Firepad.fromMonaco(firepadRef, window.editor);
@@ -38,13 +57,68 @@ const Layout = () => {
     window.term.open(document.getElementById('output'));
 
     fitAddon.fit();
+
+    // const url = 'ws://localhost:3010';
+    // const connection = (window.socketConnection = new WebSocket(url));
+    // connection.binaryType = 'arraybuffer';
+
+    // var socket = window.socketConnection = io.connect('http://localhost:3010');
+    // socket.on('connect', function(data) {
+    //   socket.emit('join', 'Hello World from client');
+    // });
+
+    //   connection.onopen = () => {
+    //     connection.send(
+    //       JSON.stringify({
+    //         type: 'client_connected',
+    //         payload: 'Hello From Client',
+    //       })
+    //     );
+    //   };
+
+    //   connection.onerror = (error) => {
+    //     console.log(`WebSocket error: ${error}`);
+    //   };
+
+    //   connection.onmessage = (e) => {
+    //     const data = JSON.parse(e.data);
+    //     // console.log(ab2str(e.data));
+    //     if (e.data instanceof Blob) {
+    //       const reader = new FileReader();
+    //       // reader.onload = () => {
+    //       //   console.log(reader.result);
+    //       // };
+
+    //       reader.addEventListener('loadend', (e) => {
+    //         console.log(e);
+    //       });
+
+    //       reader.readAsText(e.data);
+    //     } else {
+    //       window.term.reset();
+
+    //       data.payload.split(',').forEach((res) => {
+    //         window.term.writeln(`${res}`);
+
+    //         fitAddon.fit();
+    //       });
+
+    //       // console.log(data);
+    //     }
+    //   };
   }, []);
+
+  const onClickRun = () => {
+    // executeCode();
+
+    connectNoVNC(document.getElementById('screen'));
+  };
 
   return (
     <div className="layout container">
       <div className="row">
         <div className="col-sm-6">
-          <button className="layout__run" onClick={runit}>
+          <button className="layout__run" onClick={onClickRun}>
             Run
           </button>
           <div id="firepad"></div>
@@ -55,7 +129,8 @@ const Layout = () => {
       </div>
       <div className="row">
         <div className="col">
-          <div id="canvas-ele"></div>
+          <div id="status"></div>
+          <div id="screen"></div>
         </div>
       </div>
     </div>
